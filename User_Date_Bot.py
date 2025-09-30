@@ -1,15 +1,16 @@
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 import discord
 import math
 import yaml
+import os
 
-# Load the config file and get the bot token and channel ID
-with open('config.yml', 'r') as f:
-    config = yaml.safe_load(f)
-bot_token = config['BOT_TOKEN']
-channel_id = config['CHANNEL_ID']
-recent_join_channel_id = config['RECENT_JOIN_CHANNEL_ID']
-allowed_role_id = config['PERMS_ROLE_ID']
+# Load the config from dotenv / env variables
+load_dotenv()
+bot_token = os.getenv('BOT_TOKEN', '')
+channel_id = os.getenv('CHANNEL_ID', '')
+recent_join_channel_id = os.getenv('RECENT_JOIN_CHANNEL_ID', '')
+allowed_role_id = os.getenv('PERMS_ROLE_ID', '')
 
 # Load the dates file and get the list of dates to match
 with open('dates.yml', 'r') as f:
