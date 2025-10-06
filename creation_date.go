@@ -119,13 +119,13 @@ func sendEvaderMessage(s *discordgo.Session, m *discordgo.Member, createdAt time
 	return err
 }
 
-func sendRecentMessage(s *discordgo.Session, m *discordgo.Member, difference time.Duration) error {
-	seconds := int(difference.Seconds() * 1000)
+func sendRecentMessage(s *discordgo.Session, m *discordgo.Member, createdAt time.Time) error {
+	seconds := int(createdAt.Unix() * 1000)
 
 	message := fmt.Sprintf(
 		":new: **NEW ACCOUNT**, new user <@!%[1]s> (**%[2]s**, `%[1]s`):\n"+
 			"Account creation date **<t:%[3]d:D>** (<t:%[3]d:R>) is less than **24 hours old**.", m.User.ID, m.User.Username, seconds)
-	_, err := s.ChannelMessageSend(alertsChannelId, message)
+	_, err := s.ChannelMessageSend(recentJoinChannelId, message)
 	return err
 }
 
@@ -142,7 +142,7 @@ func onMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Get the difference between now and when the account was created (time.Duration)
 	between := now.Sub(timeCreated)
 	if between.Hours() < 24 {
-		if err := sendRecentMessage(s, m.Member, between); err != nil {
+		if err := sendRecentMessage(s, m.Member, timeCreated); err != nil {
 			log.Print("failed to send message", err)
 		}
 	} else if datesIncludes(timeCreated) {
