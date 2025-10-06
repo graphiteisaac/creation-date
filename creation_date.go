@@ -130,6 +130,7 @@ func sendRecentMessage(s *discordgo.Session, m *discordgo.Member, difference tim
 }
 
 func onMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+	log.Printf("user joined:\n%+v\n\n", m)
 	now := time.Now()
 
 	// Retrieve the time.Time from the user's snowflake
