@@ -120,11 +120,9 @@ func sendEvaderMessage(s *discordgo.Session, m *discordgo.Member, createdAt time
 }
 
 func sendRecentMessage(s *discordgo.Session, m *discordgo.Member, createdAt time.Time) error {
-	seconds := int(createdAt.Unix() * 1000)
-
 	message := fmt.Sprintf(
 		":new: **NEW ACCOUNT**, new user <@!%[1]s> (**%[2]s**, `%[1]s`):\n"+
-			"Account creation date **<t:%[3]d:D>** (<t:%[3]d:R>) is less than **24 hours old**.", m.User.ID, m.User.Username, seconds)
+			"Account creation date **<t:%[3]d:D>** (<t:%[3]d:R>) is less than **24 hours old**.", m.User.ID, m.User.Username, createdAt.Unix())
 	_, err := s.ChannelMessageSend(recentJoinChannelId, message)
 	return err
 }
