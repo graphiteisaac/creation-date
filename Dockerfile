@@ -1,12 +1,18 @@
-FROM python:3.9-slim
+FROM golang:1.24.3-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . .
+COPY go.mod go.sum ./
+RUN go mod download
 
-# install deps
-RUN python3 -m pip install -U pyyaml
-RUN python3 -m pip install -U discord.py
-RUN python3 -m pip install -U python-dotenv
+COPY *.go ./
 
-CMD ["python", "User_Date_Bot.py"]
+# Build
+RUN go build -o ./bot
+
+# Application run layer
+FROM scratch
+COPY --from=builder /app/bot /bot
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+ENTRYPOINT ["/bot"]
