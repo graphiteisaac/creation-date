@@ -5,10 +5,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY *.go ./
+COPY ./cmd ./cmd
 
 # Build
-RUN go build -o ./bot
+RUN go build -o bot ./cmd/creation_bot
 
 # Application run layer
 FROM scratch
