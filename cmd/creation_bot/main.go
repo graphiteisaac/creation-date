@@ -319,9 +319,9 @@ func handleListDates(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if len(group) == 1 {
 			response.WriteString(group[0].Format("2006-01-02") + "\n")
 		} else {
-			response.WriteString(fmt.Sprintf("%s ➜ %s\n",
+			fmt.Fprintf(&response, "%s ➜ %s\n",
 				group[0].Format("2006-01-02"),
-				group[len(group)-1].Format("2006-01-02")))
+				group[len(group)-1].Format("2006-01-02"))
 		}
 	}
 
