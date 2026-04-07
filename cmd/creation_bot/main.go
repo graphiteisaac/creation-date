@@ -29,8 +29,8 @@ const (
 
 var (
 	botToken            string
-	alertsChannelId     string
-	recentJoinChannelId string
+	alertsChannelID     string
+	recentJoinChannelID string
 	allowedRole         string
 	dates               []string
 )
@@ -76,8 +76,8 @@ func loadEnvironment() {
 
 	// Important configuration variables, including the bot token and various discord snowflakes
 	botToken = os.Getenv("BOT_TOKEN")
-	alertsChannelId = os.Getenv("CHANNEL_ID")
-	recentJoinChannelId = os.Getenv("RECENT_JOIN_CHANNEL_ID")
+	alertsChannelID = os.Getenv("CHANNEL_ID")
+	recentJoinChannelID = os.Getenv("RECENT_JOIN_CHANNEL_ID")
 	allowedRole = os.Getenv("PERMS_ROLE_ID")
 }
 
@@ -115,7 +115,7 @@ func sendEvaderMessage(s *discordgo.Session, m *discordgo.Member, createdAt time
 		":warning: **SUSPICIOUS JOIN**, new user <@!%[1]s> (**%[2]s**, `%[1]s`):\n"+
 			"Account creation date **<t:%[3]d:D>** matches that of known alternate accounts used by ban evaders; all dates defined in master list.\n"+
 			"*(No action taken, awaiting manual review — take appropriate action if necessary.)*", m.User.ID, m.User.Username, createdAt.Unix()*1000)
-	_, err := s.ChannelMessageSend(alertsChannelId, message)
+	_, err := s.ChannelMessageSend(alertsChannelID, message)
 	return err
 }
 
@@ -123,7 +123,7 @@ func sendRecentMessage(s *discordgo.Session, m *discordgo.Member, createdAt time
 	message := fmt.Sprintf(
 		":new: **NEW ACCOUNT**, new user <@!%[1]s> (**%[2]s**, `%[1]s`):\n"+
 			"Account creation date **<t:%[3]d:D>** (<t:%[3]d:R>) is less than **24 hours old**.", m.User.ID, m.User.Username, createdAt.Unix())
-	_, err := s.ChannelMessageSend(recentJoinChannelId, message)
+	_, err := s.ChannelMessageSend(recentJoinChannelID, message)
 	return err
 }
 
